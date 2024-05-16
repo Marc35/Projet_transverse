@@ -1,0 +1,37 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+struct maillon {
+    int valeur;
+    struct maillon *succ;
+};
+
+/* Définition du type maillon */
+typedef struct maillon MAILLON;
+
+/* Définition du type liste */
+typedef MAILLON* LISTE;
+
+int main() {
+    LISTE L = NULL;
+    MAILLON *new, *tmp;
+    int N;
+
+    scanf("%d", &N);
+
+    for (int i = 0; i < N; i++) {
+        new = (MAILLON*) malloc(sizeof(MAILLON));
+        new->valeur = i * 10 - 2;
+        new->succ = NULL;
+
+        if (L == NULL) {
+            L = new;
+            tmp = L;
+        } else {
+            tmp->succ = new;
+            tmp = tmp->succ;
+        }
+    }
+
+    return 0;
+}
