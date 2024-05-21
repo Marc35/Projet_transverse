@@ -18,6 +18,7 @@ clock = pygame.time.Clock()
 pygame.display.set_caption("Spider Dash")
 running_spider_dash = True
 in_menu_spider_dash = True
+end_screen_spider_dash = True
 
 font = pygame.font.Font('freesansbold.ttf', 32)
 
@@ -825,4 +826,37 @@ while running_spider_dash:
         dt = 1/60
     time+=dt
     clock.tick(60)
-pygame.quit()
+
+file = open("../LevelSave.txt","a")
+
+file.write("Score:SpiderDash:"+str(l_player[0][14])+"\n")
+
+file.close()
+
+while end_screen_spider_dash:
+    
+    
+    
+    textRect = text.get_rect()
+    textRect.center = (800, 200)
+    screen.blit(text, textRect)
+
+    text = font.render("APPUYER SUR ENTREE POUR QUITTER", True,(255,223,0))
+    textRect = text.get_rect()
+    textRect.center = (800, 700)
+    screen.blit(text, textRect)
+
+    text = font.render("YOU DIED", True,(255,0,0))
+    textRect = text.get_rect()
+    textRect.center = (800, 400)
+    screen.blit(text, textRect)
+
+    pygame.display.flip()
+
+    keys = pygame.key.get_pressed()
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+    if keys[pygame.K_RETURN]:
+        end_screen_spider_dash = False
+        pygame.quit()
