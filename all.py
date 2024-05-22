@@ -4,7 +4,7 @@ import pygame
 import os
 from game import Game
 from random import *
-import math
+from math import *
 
 
 
@@ -233,8 +233,12 @@ image_piece = pygame.image.load("Assets/Images/Items/piece.png")
 # Pour les dashs
 list_dashs = []
 image_dash = pygame.image.load("Assets/Images/Items/dash.png")
+image_heart = pygame.image.load("Assets/Images/heart.png")
 # Pour les ennemis
 list_ennemis = []
+vie = 5
+mort = 0
+piece = 0
 
 # Autres variables
 frame_counter = 200         # Pour la gestion du temps entre le spawn des plateformes
@@ -261,10 +265,31 @@ while running:
     screen.blit(image_dash, (50, 0))
     score_display = myfont.render(str(game.player.nb_dash), 1, (0, 0, 0))
     screen.blit(score_display, (45, 0))
-
+    #Pour les vies
+    image_heart = pygame.transform.scale(image_heart, (40, 30))
+    screen.blit(image_heart, (115, 0))
+    score_display = myfont.render(str("Nombre vie : "+str(vie-mort)), 1, (0, 0, 0))
+    screen.blit(score_display, (165, 2))
+    font = pygame.font.Font('freesansbold.ttf', 32)
     ##### Si on est pas en phase de jeu #####
     if not game.is_playing:
         play_button = screen.blit(play, (1280/2 - play.get_size()[0]/2, 720/2 - play.get_size()[1]/2))
+
+        if(vie-mort == 5):
+            text = font.render("VOUS ALLEZ JOUER A RUN_AND_JUMP.", True,(102, 55, 38))
+            screen.blit(text, (400, 460))
+
+            text = font.render("VOUS DISPOSEZ DE 5 VIES. CHAQUE PIECE VOUS RAPPORTE 10 000 POINTS.", True,(102, 55, 38))
+            screen.blit(text, (40, 500))
+
+            text = font.render("ATTENTION, VOUS PERDEZ 2 PIECES A VOTRE TROISIEME MORT !", True,(102, 55, 38))
+            screen.blit(text, (150, 540))
+
+            pygame.display.flip()
+
+
+        if(vie-mort == 0):
+            running = False
 
         # Si le joueur clic sur le boutton play
         if play_button.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0]:
@@ -387,6 +412,7 @@ while running:
                     game.player.piece += 3
                 elif game.player.rect.colliderect(i.rect):
                     game.loose()
+                    mort += 1
                     list_ennemis.remove(i)
                 elif i.rect.x < -50:
                     list_ennemis.remove(i)
@@ -432,11 +458,18 @@ while running:
     if game.player.rect.y > 720 or game.player.rect.x < -50:
         if game.current_bloc.rect.x < -10:
             game.player.basic_pos = [0, 125]
+        mort += 1
         game.loose()
     if game.player.vies == 0:
-        game.player.piece = 0
+        game.player.piece -= 2
         game.player.vies = 3
+        
 
     # flip() the display to put your work on screen
     pygame.display.flip()
+file = open("LevelSave.txt","w")
+score = game.player.piece * 10000
+file.write("Score:RunJump:"+str(score)+"\n")
+
+file.close()
 pygame.quit()
