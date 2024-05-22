@@ -232,6 +232,8 @@ def updateWorld(message):
             try:
                 i.send(pickle.dumps(update))
                 print("Sent update data")
+            except EOFError:
+                print("EOFError: Client closed the connection.")
             except Exception as e:
                 print(f"Error sending update data: {e}")
                 remove.append(i)
