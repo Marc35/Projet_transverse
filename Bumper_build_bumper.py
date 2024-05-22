@@ -27,3 +27,4 @@ class Build_bumper(Build):
     def reset_bumper(self, nb):
         if self.is_preselected.cpt >= -nb:
             self.is_preselected.cpt += nb
+

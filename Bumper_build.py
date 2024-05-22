@@ -196,23 +196,37 @@ class Build:
         # L'angle renvoyé est entre -280 et 80, on la rapporte à 0 - 360
         self.is_selected.angle = (self.is_selected.angle+360)%360
         # Pour trouver les nouveaux points qui forment la plateforme après rotate
-        m = (int(self.is_selected.sauv_pos_x + self.is_selected.sauv_height/2), int(self.is_selected.sauv_pos_y + self.is_selected.sauv_width / 2))
-        point_centre2 = (m[0] - self.is_selected.sauv_height/2 * cos(self.is_selected.angle * (pi / 180)), m[1] + self.is_selected.sauv_height/2 * sin(self.is_selected.angle * (pi / 180)))
-        point_centre1 = (m[0] + self.is_selected.sauv_height/2 * cos(self.is_selected.angle * (pi / 180)), m[1] - self.is_selected.sauv_height/2 * sin(self.is_selected.angle * (pi / 180)))
-        self.is_selected.points[0] = [point_centre2[0] - self.is_selected.sauv_width/2 * sin(self.is_selected.angle * (pi/180)), point_centre2[1] - self.is_selected.sauv_width/2 * cos(self.is_selected.angle * (pi/180))]
-        self.is_selected.points[1] = [point_centre2[0] + self.is_selected.sauv_width/2 * sin(self.is_selected.angle * (pi/180)), point_centre2[1] + self.is_selected.sauv_width/2 * cos(self.is_selected.angle * (pi/180))]
-        self.is_selected.points[2] = [point_centre1[0] - self.is_selected.sauv_width/2 * sin(self.is_selected.angle * (pi/180)), point_centre1[1] - self.is_selected.sauv_width/2 * cos(self.is_selected.angle * (pi/180))]
-        self.is_selected.points[3] = [point_centre1[0] + self.is_selected.sauv_width/2 * sin(self.is_selected.angle * (pi/180)), point_centre1[1] + self.is_selected.sauv_width/2 * cos(self.is_selected.angle * (pi/180))]
+        self.update_points()
         # Pour rotate
         center = (self.is_selected.rect.x + self.is_selected.rect[2] // 2, self.is_selected.rect.y + self.is_selected.rect[3] // 2)
         self.is_selected.image = pygame.transform.rotate(self.is_selected.image_base, self.is_selected.angle)
         self.is_selected.rect = self.is_selected.image.get_rect(center=center)
 
+    def update_points(self):
+        m = (int(self.is_selected.sauv_pos_x + self.is_selected.sauv_height / 2),int(self.is_selected.sauv_pos_y + self.is_selected.sauv_width / 2))
+        point_centre2 = (m[0] - self.is_selected.sauv_height / 2 * cos(self.is_selected.angle * (pi / 180)), m[1] + self.is_selected.sauv_height / 2 * sin(self.is_selected.angle * (pi / 180)))
+        point_centre1 = (m[0] + self.is_selected.sauv_height / 2 * cos(self.is_selected.angle * (pi / 180)), m[1] - self.is_selected.sauv_height / 2 * sin(self.is_selected.angle * (pi / 180)))
+        self.is_selected.points[0] = [point_centre2[0] - self.is_selected.sauv_width / 2 * sin(self.is_selected.angle * (pi / 180)), point_centre2[1] - self.is_selected.sauv_width / 2 * cos(self.is_selected.angle * (pi / 180))]
+        self.is_selected.points[1] = [point_centre2[0] + self.is_selected.sauv_width / 2 * sin(self.is_selected.angle * (pi / 180)), point_centre2[1] + self.is_selected.sauv_width / 2 * cos(self.is_selected.angle * (pi / 180))]
+        self.is_selected.points[2] = [point_centre1[0] - self.is_selected.sauv_width / 2 * sin(self.is_selected.angle * (pi / 180)), point_centre1[1] - self.is_selected.sauv_width / 2 * cos(self.is_selected.angle * (pi / 180))]
+        self.is_selected.points[3] = [point_centre1[0] + self.is_selected.sauv_width / 2 * sin(self.is_selected.angle * (pi / 180)), point_centre1[1] + self.is_selected.sauv_width / 2 * cos(self.is_selected.angle * (pi / 180))]
+
+
+    def mouv(self):
+        """
+        Permet de déplacer un objet déja posé et séléctionné par le joueur
+        """
+        self.is_selected.rect.x = pygame.mouse.get_pos()[0] - self.is_selected.rect[2]/2
+        self.is_selected.rect.y = pygame.mouse.get_pos()[1] - self.is_selected.rect[3]/2
+        self.is_selected.sauv_pos_x = pygame.mouse.get_pos()[0] - self.is_selected.sauv_height/2
+        self.is_selected.sauv_pos_y = pygame.mouse.get_pos()[1] - self.is_selected.sauv_width/2
+        self.update_points()
+
     def place(self, pos, angle=None):
         """
         Permet de placer l'objet sélectionné par l'utilisateur
         :param pos: La position du futur objet
-        :param angle: L'angle de rotation si l'objet que l'on veut placé a déja une rotation sinon si ce paramétre est a None on placera l'objet horizontalement
+        :param angle: L'angle de rotation si l'objet que l'on veut placer à déja une rotation sinon si ce paramétre est a None on placera l'objet horizontalement
         """
         posToPlace = (pos[0] - pos[0] % (self.choice_spikes.rect[2] - 3), pos[1] - pos[1] % (self.choice_spikes.rect[3] - 3))
         match self.choose:
@@ -245,15 +259,6 @@ class Build:
                 self.is_selected = nouv_item
                 self.rotate(0)
             self.level_build.append(nouv_item)
-
-    def mouv(self):
-        """
-        Permet de déplacé un objet déja posé et séléctionné par le joueur
-        """
-        self.is_selected.rect.x = pygame.mouse.get_pos()[0] - self.is_selected.rect[2]/2
-        self.is_selected.rect.y = pygame.mouse.get_pos()[1] - self.is_selected.rect[3]/2
-        self.is_selected.sauv_pos_x = pygame.mouse.get_pos()[0] - self.is_selected.sauv_height/2
-        self.is_selected.sauv_pos_y = pygame.mouse.get_pos()[1] - self.is_selected.sauv_width/2
 
     def saving(self):
         """

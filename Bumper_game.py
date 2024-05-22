@@ -65,7 +65,7 @@ class Game:
         """
         self.bullet.velocity[1] += dt * self.gravité
 
-    def bounce(self, obj, dt):
+    def bounce(self, obj, dt, overlap):
         """
         Permet de calculer et d'appliquer le rebond de la balle et de set sa vélocité afin qu'elle effectue se rebond
         :param obj: l'objet qui rentre en contact avec la balle
@@ -85,18 +85,19 @@ class Game:
         coef2 = (point2[1] - point3[1]) / (point2[0] - point3[0] + 0.0001)
         origine1 = point1[1] - coef1 * point1[0]
         origine2 = point3[1] - coef2 * point3[0]
-        expected_y1 = coef1 * self.bullet.rect.center[0] + origine1
-        expected_y2 = coef2 * self.bullet.rect.center[0] + origine2
+        expected_y1 = coef1 * (overlap[0] + self.bullet.rect.x) + origine1
+        expected_y2 = coef2 * (overlap[0] + self.bullet.rect.x) + origine2
+
         if 0 < obj.angle < 180:
             # expected_y1 est la ligne du dessus, inversement pour l'autre condition
             # self.bullet.rect.y + self.bullet.rect[3] traite les edge cases (littéralement)
-            if self.bullet.rect.y < expected_y2 or self.bullet.rect.y + self.bullet.rect[3] > expected_y1:
+            if (overlap[1] + self.bullet.rect.y) < expected_y2 or (overlap[1] + self.bullet.rect.y) > expected_y1:
                 add_angle = 0
         else:
-            if self.bullet.rect.y + self.bullet.rect[3] > expected_y2 or self.bullet.rect.y < expected_y1:
+            if (overlap[1] + self.bullet.rect.y) > expected_y2 or (overlap[1] + self.bullet.rect.y) < expected_y1:
                 add_angle = 0
-
         # On calcule la normale et le rebond
+
         normal = [cos(radians(-(obj.angle - add_angle))), sin(radians(-(obj.angle - add_angle)))]
         vit_para = normal[0] * self.bullet.velocity[0] + normal[1] * self.bullet.velocity[1]
         self.bullet.velocity[0] -= vit_para * normal[0] + vit_para * normal[0] * obj.bounce

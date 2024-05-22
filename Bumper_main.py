@@ -18,7 +18,7 @@ font = pygame.font.SysFont('Verdana', 20, 0)  # Pour la police d'écriture
 
 # Pour l'arrière-plan
 background_00 = pygame.image.load("FinalAssets/Background/Background2/Image0.png")
-game.build.mapToBuild = 2
+game.build.mapToBuild = 0
 game.build.building()
 game.build_bumper.bump_classique.cpt = game.build.bump_classique.cpt
 game.build_bumper.bump_speed.cpt = game.build.bump_speed.cpt
@@ -41,6 +41,7 @@ while running:
 
         # Pour sortir du mode build
         if game.build.finish.rect.collidepoint(pygame.mouse.get_pos()) and clic:
+            game.build_bumper.level_build = []
             game.build_bumper.bump_classique.cpt = game.build.bump_classique.cpt
             game.build_bumper.bump_speed.cpt = game.build.bump_speed.cpt
             game.build_bumper.bump_gravity.cpt = game.build.bump_gravity.cpt
@@ -114,11 +115,16 @@ while running:
                             game.isAiming = False
                             game.placing = True
                         else:
+                            running = False
                             pygame.quit()
+                            break
                     if i.id not in ["StopGravity_portal", "blue_portal", "red_portal", "spike", "crystal", "fin"]:
-                        game.bounce(i, dt)
+                        game.bounce(i, dt, game.collision(i))
             else:
                 i.colli = False
+
+        if running == False:
+            break
 
         for i in game.build_bumper.level_build:
             screen.blit(i.image, i.rect)
@@ -126,7 +132,7 @@ while running:
                 if i.colli == False:
                     game.modifiers_bumpers(i)
                     i.colli = True
-                    game.bounce(i, dt)
+                    game.bounce(i, dt, game.collision(i))
             else:
                 i.colli = False
             if i.rect.collidepoint(pygame.mouse.get_pos()) and pygame.mouse.get_pressed()[0] and game.build_bumper.is_mouving:
@@ -200,6 +206,11 @@ while running:
         game.isAiming = False
         press_one_key = False
         game.is_building = True
+
+    if key[pygame.K_ESCAPE]:
+        running = False
+        pygame.quit()
+        break
 
     # flip() the display to put your work on screen
     pygame.display.flip()
