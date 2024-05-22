@@ -44,15 +44,16 @@ if first_connection:
     fullscreen = False
     run = True
     #ajouter l'image de fond
-    background_image = pygame.image.load("background.jpg").convert()
+    background_image = pygame.image.load("paysage3.jpeg").convert()
     background_image = pygame.transform.scale(background_image, (x, y))
     display.blit(background_image, (0, 0))
 
     
     while run:
         mouse_pos = pygame.mouse.get_pos()
+        display.blit(background_image, (0, 0))
         if(text_value == ""):
-            display.blit(background_image, (0, 0))
+            
             display.blit(font.render("Veuillez choisir un nom", True, (255, 0, 0)), (100, 250))
             pygame.display.update()
         for event in pygame.event.get():
@@ -63,10 +64,10 @@ if first_connection:
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_F11:
                     fullscreen = not fullscreen
-                if fullscreen:
-                    win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-                else:
-                    win = pygame.display.set_mode((x, y))
+                    if fullscreen:
+                        win = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+                    else:
+                        win = pygame.display.set_mode((x, y))
                 if event.key == pygame.K_BACKSPACE:
                     text_value = text_value[:-1]
                     text = font.render(text_value, True, (255, 255, 255))
@@ -78,8 +79,7 @@ if first_connection:
             if event.type == pygame.TEXTINPUT:
                 text_value += event.text
                 text = font.render(text_value, True, (255, 255, 255))
-        display.blit(background_image, (0, 0))
-        display.blit(text, (100, 150))
+        display.blit(text, (100, 250))
         pygame.display.update()
         
 
@@ -111,6 +111,8 @@ pygame.init()
 screen = pygame.display.set_mode((1600, 720))
 screen_w, screen_h = (screen.get_width(), screen.get_height())
 screen = pygame.display.set_mode((screen_w, screen_h))
+background_image = pygame.image.load("paysage2.jpg").convert()
+background_image = pygame.transform.scale(background_image, (screen_w, screen_h))
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -244,6 +246,7 @@ while running:
     update_data += 1
 
     screen.fill(WHITE)
+    screen.blit(background_image, (0, 0))
     keys = pygame.key.get_pressed()
 
     for event in pygame.event.get():
@@ -290,8 +293,6 @@ while running:
         speed_x -= speed
     if keys[pygame.K_z] and not keys_B4["z"]:
         speed_y -= speed
-    elif not keys[pygame.K_z] and keys_B4["z"]:
-        speed_y += speed
     if keys[pygame.K_s] and not keys_B4["s"]:
         speed_y += speed
     elif not keys[pygame.K_s] and keys_B4["s"]:
@@ -306,7 +307,7 @@ while running:
 
     
     speed_y += GRAVITY
-    
+
     touch_x, touch_y = False, False
     for prop in l_prop:
         if rectRect(cube_x+speed_x, cube_y, SIZE, SIZE, prop[0], prop[1], prop[2], prop[3]):
