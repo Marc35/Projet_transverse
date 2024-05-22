@@ -22,7 +22,7 @@ class Game:
         #Attributs d'états
         self.isAiming = False
         self.isLaunched = False
-        self.is_building = True
+        self.is_building = False
         self.placing = True
         # Attributs pour la physique
         self.gravité = 100

@@ -18,7 +18,11 @@ font = pygame.font.SysFont('Verdana', 20, 0)  # Pour la police d'écriture
 
 # Pour l'arrière-plan
 background_00 = pygame.image.load("FinalAssets/Background/Background2/Image0.png")
-
+game.build.mapToBuild = 2
+game.build.building()
+game.build_bumper.bump_classique.cpt = game.build.bump_classique.cpt
+game.build_bumper.bump_speed.cpt = game.build.bump_speed.cpt
+game.build_bumper.bump_gravity.cpt = game.build.bump_gravity.cpt
 while running:
     with open("maps.txt", "r") as doc:
         nb_maps = len(doc.readlines())
@@ -97,15 +101,20 @@ while running:
                     i.colli = True
                     if i.id == "fin":
                         game.reset_ball()
-                        game.build.mapToBuild += 1
-                        game.build.building()
-                        game.build_bumper.bump_classique.cpt = game.build.bump_classique.cpt
-                        game.build_bumper.bump_speed.cpt = game.build.bump_speed.cpt
-                        game.build_bumper.bump_gravity.cpt = game.build.bump_gravity.cpt
-                        game.build_bumper.level_build = []
-                        game.isLaunched = False
-                        game.isAiming = False
-                        game.placing = True
+                        with open("maps.txt", "r") as file:
+                            nb_maps = len(file.readlines())
+                        if game.build.mapToBuild < nb_maps - 1:
+                            game.build.mapToBuild += 1
+                            game.build.building()
+                            game.build_bumper.bump_classique.cpt = game.build.bump_classique.cpt
+                            game.build_bumper.bump_speed.cpt = game.build.bump_speed.cpt
+                            game.build_bumper.bump_gravity.cpt = game.build.bump_gravity.cpt
+                            game.build_bumper.level_build = []
+                            game.isLaunched = False
+                            game.isAiming = False
+                            game.placing = True
+                        else:
+                            pygame.quit()
                     if i.id not in ["StopGravity_portal", "blue_portal", "red_portal", "spike", "crystal", "fin"]:
                         game.bounce(i, dt)
             else:
@@ -156,7 +165,7 @@ while running:
                     game.build_bumper.rotate()
                 if press_one_key != False and press_one_key == pygame.K_LEFT:
                     press_one_key = False
-                    game.build.rotate(45)
+                    game.build_bumper.rotate(45)
                 if key[pygame.K_f]:
                     game.build_bumper.mouv()
 
@@ -167,6 +176,11 @@ while running:
             if press_one_key != False and press_one_key == pygame.K_SPACE:
                 game.isAiming = False
                 game.isLaunched = True
+                press_one_key = False
+            if press_one_key != False and press_one_key == pygame.K_b:
+                game.reset_ball()
+                game.placing = True
+                game.isAiming = False
                 press_one_key = False
 
         if game.isLaunched:
@@ -179,6 +193,13 @@ while running:
 
             if game.bullet.rect.y > 720 - game.bullet.rect[3]:
                 game.bullet.rebond()
+
+    if key[pygame.K_LSHIFT] and key[pygame.K_a]:
+        game.reset_ball()
+        game.placing = True
+        game.isAiming = False
+        press_one_key = False
+        game.is_building = True
 
     # flip() the display to put your work on screen
     pygame.display.flip()
