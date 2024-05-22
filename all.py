@@ -467,7 +467,7 @@ while running:
 
     # flip() the display to put your work on screen
     pygame.display.flip()
-file = open("LevelSave.txt","w")
+file = open("LevelSave.txt","a")
 score = game.player.piece * 10000
 file.write("Score:RunJump:"+str(score)+"\n")
 
