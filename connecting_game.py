@@ -120,6 +120,7 @@ BLUE = (0,0,255)
 YELLOW = (255,255,0)
 AQUA = 	(0,255,255)
 MAGENTA = 	(255,0,255)
+GREEN = (0,255,0)
 
 GRAVITY = (900.8)/400
 
@@ -153,7 +154,8 @@ all_portal = [
     [800,200,45, BLUE, "a\n"],#"a\n"
     [600,400,50, YELLOW, "b\n"],#"b\n"
     [400,600,50, AQUA, "c\n"],#"c\n"
-    [1200,300,50, MAGENTA, "d\n"]#"d\n"
+    [1200,300,50, MAGENTA, "d\n"],#"d\n"
+    [1000,500,50, GREEN, "e\n"]
 ]
 
 l_portal = []
@@ -173,6 +175,8 @@ if "c" not in l_letter:
     l_portal.append(all_portal[2])
 if "d" not in l_letter:
     l_portal.append(all_portal[3])
+if "e" not in l_letter:
+    l_portal.append(all_portal[4])
 
 for line in lines:
     print(line[:5])

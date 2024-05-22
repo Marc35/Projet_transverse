@@ -7,7 +7,7 @@ file1.write("Levels:")
 file1.close()
 
 
-l_file = ['SpiderDash/spider_dash.py','AngryBirds/main2.py','./all.py', './']
+l_file = ['SpiderDash/spider_dash.py','AngryBirds/main2.py','./all.py', './Bumper_main.py', "./test_spyder_dash/client_spider_dash.py"]
 running_connection = True
 current_directory = os.getcwd()
 while running_connection:
@@ -31,6 +31,8 @@ while running_connection:
         file_to_run = l_file[2]
     elif l_lines[-1][0] == "d":
         file_to_run = l_file[3]
+    elif l_lines[-1][0] == "e":
+        file_to_run = l_file[4]
     else:
         print("BREAK BOI : ", l_lines[-1])
     # Changer le répertoire de travail
