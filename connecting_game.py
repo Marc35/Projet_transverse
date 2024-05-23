@@ -259,6 +259,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            pygame.quit()
+            sys.exit()
     for prop in l_prop:
         pygame.draw.rect(screen, BLACK, (prop[0], prop[1], prop[2], prop[3]))
     for portal in l_portal:
@@ -346,4 +348,4 @@ file.write(la_lettre)
 file.close()
 print("QUITTING MENU")
 # Quit Pygame
-#pygame.quit()
+pygame.quit()
