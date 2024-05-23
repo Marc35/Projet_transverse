@@ -7,7 +7,7 @@ file1.write("Levels:")
 file1.close()
 
 
-l_file = ['SpiderDash/spider_dash.py','AngryBirds/main2.py','./all.py', './QQQ.py', "./test_spyder_dash/client.py"]
+l_file = ['SpiderDash/spider_dash.py','AngryBirds/main2.py','./all.py', './Bumper_main.py', "./test_spyder_dash/client.py"]
 running_connection = True
 current_directory = os.getcwd()
 while running_connection:

@@ -1,4 +1,3 @@
 Levels:Jean
-d
-Score:Bumper:150000
-e
+b
+Score:AngryBirds:11000

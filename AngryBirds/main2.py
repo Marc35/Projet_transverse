@@ -488,7 +488,10 @@ save = rects_files(file_name, line_number)
 rects = []
 
 for i in range(int(len(save)/6)): #In the save, each rectangles has 6 parameters so we divid by 6 to get the nb of rect
-    rects.append([(int(save[0+i*6]), int(save[1+i*6])), (int(save[2+i*6]), int(save[3+i*6])), int(save[4+i*6]), int(save[5+i*6])])
+    if save[0+i*6] == "pig":
+        d_pig["shape"].append(add_object(space, int(save[1+i*6]), int(save[2+i*6]), 30, 10, 2))
+    else:
+        rects.append([(int(save[0+i*6]), int(save[1+i*6])), (int(save[2+i*6]), int(save[3+i*6])), int(save[4+i*6]), int(save[5+i*6])])
     #We add a rectangle,[(x, y), (w,h), color, mass]
 
 #Place the props and note all of them in a list inside a dict
@@ -501,13 +504,51 @@ for prop in d_prop_info["shape"]: #We itteratte for each prop:
 #Create the limit of the map
 map_limit(space)
 
-#Create a pig and add it to a list inside a dictionary
-d_pig["shape"].append(add_object(space, 1050, 350, 30, 10, 2))
 
+with open(file_name, "r") as f:
+    lines = f.readlines()
+    nb_level = len(lines)
+    f.close()
 
 while running: #We loop while the game is running
     
+    nb_pig = len(d_pig["shape"]) #We note the number of pig
 
+    if nb_pig == 0 and not building: #If there is no pig left
+        if nb_level == line_number: #If we are at the last level
+            running = False
+            print("You won !") #You won
+        else:
+            #We remove all body on the screen
+            #And reset variables to be able to launch again
+            ball, bird_pos, launching, ball2, ball3, egg = remove_ball(space, ball, ball2, ball3, egg, origin_bird_pos, bird_pos, launching)
+            capacity = False
+            create_white_dot = True
+            l_white_dot = []
+            rects = []
+            for guy in d_pig["shape"]:
+                space.remove(guy, guy.body)
+            d_pig["shape"] = []
+            d_pig["last_vel"] = []
+            line_number+=1 #Take the next line numer
+            save = rects_files(file_name, line_number) #Get the save from the save file
+            for i in range(int(len(save)/6)):  #For each prop in the save file
+                #We place it in a list
+                if save[0+i*6] == "pig":
+                    d_pig["shape"].append(add_object(space, int(save[1+i*6]), int(save[2+i*6]), 30, 10, 2))
+                else:
+                    rects.append([(int(save[0+i*6]), int(save[1+i*6])), (int(save[2+i*6]), int(save[3+i*6])), int(save[4+i*6]), int(save[5+i*6])])
+            
+            #We clear every current shape from the sapce
+            for props in d_prop_info["shape"]:
+                space.remove(props, props.body)
+            
+            #We put all new shape in the list that keep tracks of props 
+            #And we add them to the space at the same time
+            d_prop_info["shape"] = create_structure(space, rects)
+
+
+    
     keys = pygame.key.get_pressed()#We get the current status of all keybord key
 
         
@@ -684,12 +725,19 @@ while running: #We loop while the game is running
             #This will clear the map and load the n-1 preset
             if pygame.mouse.get_pos()[0] < 50:
                 rects = []
+                for guy in d_pig["shape"]:
+                    space.remove(guy, guy.body)
+                d_pig["shape"] = []
+                d_pig["last_vel"] = []
                 line_number-=1 #Take the previous line numer
                 save = rects_files(file_name, line_number) #Get the save from the save file
 
                 for i in range(int(len(save)/6)): #For each prop in the save file
                     #We place it up in a list
-                    rects.append([(int(save[0+i*6]), int(save[1+i*6])), (int(save[2+i*6]), int(save[3+i*6])), int(save[4+i*6]), int(save[5+i*6])])
+                    if save[0+i*6] == "pig":
+                        d_pig["shape"].append(add_object(space, int(save[1+i*6]), int(save[2+i*6]), 30, 10, 2))
+                    else:
+                        rects.append([(int(save[0+i*6]), int(save[1+i*6])), (int(save[2+i*6]), int(save[3+i*6])), int(save[4+i*6]), int(save[5+i*6])])
                 
                 #We clear every current shape from the sapce
                 for props in d_prop_info["shape"]:
@@ -703,11 +751,18 @@ while running: #We loop while the game is running
             #This will clear the map and load the n+1 preset
             elif 50<pygame.mouse.get_pos()[0] and pygame.mouse.get_pos()[0] < 100:
                 rects = []
+                for guy in d_pig["shape"]:
+                    space.remove(guy, guy.body)
+                d_pig["shape"] = []
+                d_pig["last_vel"] = []
                 line_number+=1 #Take the next line numer
                 save = rects_files(file_name, line_number) #Get the save from the save file
                 for i in range(int(len(save)/6)):  #For each prop in the save file
                     #We place it in a list
-                    rects.append([(int(save[0+i*6]), int(save[1+i*6])), (int(save[2+i*6]), int(save[3+i*6])), int(save[4+i*6]), int(save[5+i*6])])
+                    if save[0+i*6] == "pig":
+                        d_pig["shape"].append(add_object(space, int(save[1+i*6]), int(save[2+i*6]), 30, 10, 2))
+                    else:
+                        rects.append([(int(save[0+i*6]), int(save[1+i*6])), (int(save[2+i*6]), int(save[3+i*6])), int(save[4+i*6]), int(save[5+i*6])])
                 
                 #We clear every current shape from the sapce
                 for props in d_prop_info["shape"]:
@@ -740,6 +795,10 @@ while running: #We loop while the game is running
                 for props in d_prop_info["shape"]:
                     space.remove(props, props.body)
                 d_prop_info["shape"] = []
+                for guy in d_pig["shape"]:
+                    space.remove(guy, guy.body)
+                d_pig["shape"] = []
+
             
             #Placing mode
             #This puts the user in placing mode
@@ -803,6 +862,9 @@ while running: #We loop while the game is running
                     #We do so for eac prop
                     line += str(round(rec[0][0]))+";"+str(round(rec[0][1]))+";"+str(round(rec[1][0]))+";"+str(round(rec[1][1]))+";"+str(round(rec[2]))+";"+str(round(rec[3]))+";"
                 
+                #We add the pig to the line
+                for oink in d_pig["shape"]:
+                    line += "pig;"+str(round(oink.body.position[0]))+";"+str(round(oink.body.position[1]))+";0;0;0;"
                 #Finally we write the line
                 with open(file_name, "a") as f:
                     f.write(line+"\n")
@@ -1039,6 +1101,10 @@ while running: #We loop while the game is running
         create_white_dot = True
         l_white_dot = []
 
+    if keys[pygame.K_p] and not last_key and building: #Place a pig
+        #We add a pig to the game
+        d_pig["shape"].append(add_object(space, pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], 30, 10, 2))
+
     if dragging: #While we're dragging the bird:
 
         #We adjust the bird's postion for it stay under the mouse but not to teleport if the bird's wasn't clicked in it's center
@@ -1135,6 +1201,8 @@ while running: #We loop while the game is running
         bird_pos.y = ball.body.position[1]
         if frame_counter%3==0 and create_white_dot:
             l_white_dot.append((screen, "black", (bird_pos.x, bird_pos.y), 5))
+    
+    last_key = keys[pygame.K_p]
     #We draw evrything 
     draw(screen, space, draw_options, 
          bird, bird_pos, w,h, 
@@ -1143,4 +1211,11 @@ while running: #We loop while the game is running
          background_image, cata, d_pig, pig, red, chuck, bomb, terence_for_show, terence, blues, matilda, king_pig, hammer, 
          building, placing, building_weight)
 
+#We save the score in a text file
+file = open("../LevelSave.txt","a")
+file.write("Score:AngryBirds:"+str(score)+"\n")
+
+file.close()
+
+#We quit the game
 pygame.quit()
