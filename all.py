@@ -5,9 +5,83 @@ import os
 from game import Game
 from random import *
 from math import *
+pygame.init()
+in_menu_run_jump = True
 
+font = pygame.font.Font('freesansbold.ttf', 32)
+screen = pygame.display.set_mode((1280, 720))
 
+screen_w, screen_h = (screen.get_width(), screen.get_height())
+def list_of_files(directory, extension):
+    files_names = []
+    for filename in os.listdir(directory):
+        if filename.endswith(extension):
+            files_names.append(filename)
+    return files_names
 
+l_skin = list_of_files("./skin", ".png")
+for i, skin in enumerate(l_skin):
+    l_skin[i] = pygame.image.load("./skin/"+skin).convert_alpha()
+    l_skin[i] = pygame.transform.scale(l_skin[i], (50,50))
+nb_skin = len(l_skin)
+
+skin_choice = 0
+#[0, 1, 2, 3,  4,  5,       6,            7,            8,    9,              10]
+#[x, y, w, h, vx, vy, gravity, is_on_ground, monster_type, speed, apply_colision]
+l_prop = [[-100, screen_h-40, screen_w+200, 100], [-121, -100, 100, screen_h+150], [screen_w+21, -100, 100, screen_h+150], [-100, -100, screen_w+200, 100],
+          [243, 214, 349, 59], [478, 435, 382, 88], [1070, 314, 439, 75]]
+
+#418;244;349;59 1290;352;439;75; 669;479;382;88
+while in_menu_run_jump:
+    keys = pygame.key.get_pressed()
+    print("NB ++++", nb_skin)
+    
+    for event in pygame.event.get():
+    
+        if event.type == pygame.QUIT:
+            in_menu_run_jump = False
+            running = False
+    
+        if event.type == pygame.VIDEORESIZE:
+            screen = pygame.display.set_mode((event.w, event.h),pygame.RESIZABLE)
+            screen_w, screen_h = (screen.get_width(), screen.get_height())
+            background_image = pygame.transform.scale(background_image, (screen_w, screen_h))
+            l_prop[0], l_prop[1], l_prop[2], l_prop[3] = ([-100, screen_h-40, screen_w+200, 100], [-121, -100, 100, screen_h+150], [screen_w+21, -100, 100, screen_h+150], [-100, -100, screen_w+200, 100])
+    
+    if keys[pygame.K_RETURN]:
+        in_menu_run_jump = False
+        running = True
+    
+    if keys[pygame.K_LEFT] and not keys_B4["left"]:
+        skin_choice = (skin_choice-1)%nb_skin
+    
+    if keys[pygame.K_RIGHT] and not keys_B4["right"]:
+        skin_choice = (skin_choice+1)%nb_skin
+    
+    rect = pygame.Rect(0, 0, screen_w, screen_h)
+    pygame.draw.rect(screen, "gray", rect)
+    
+    text = font.render("MENU RUN AND JUMP", True,(255,0,0))
+    textRect = text.get_rect()
+    textRect.center = (800, 200)
+    screen.blit(text, textRect)
+
+    text = font.render("APPUYER SUR ENTREE POUR JOUER", True,(255,223,0))
+    textRect = text.get_rect()
+    textRect.center = (800, 700)
+    screen.blit(text, textRect)
+
+    text = font.render("<| Skin précédent                        Skin suivant |>", True,(0,0,0))
+    textRect = text.get_rect()
+    textRect.center = (800, 540)
+    screen.blit(text, textRect)
+    
+
+    screen.blit(l_skin[skin_choice], (800,525))
+
+    pygame.display.flip()
+    keys_B4 = {"z":keys[pygame.K_z], "q":keys[pygame.K_q], "s":keys[pygame.K_s], "d":keys[pygame.K_d], "space":keys[pygame.K_SPACE], "left":keys[pygame.K_LEFT], "right":keys[pygame.K_RIGHT]}
+    print(l_skin[skin_choice])
 class Items:
     def __init__(self, pos, image):
         self.image = pygame.image.load(image)
@@ -65,7 +139,7 @@ class Player():
 
     def __init__(self):
         # Pour les attributs visuels et de positions
-        self.image = pygame.image.load("Assets/Images/Oiseaux/normal.png").convert_alpha()
+        self.image = l_skin[skin_choice]
         self.rect = self.image.get_rect()
         self.basic_pos = [0, 125]
         self.rect.x = 0
@@ -187,6 +261,7 @@ class Game():
     ##### Pour la constru des plateformes #####
     def construction(self, pos, cata):
         return Blocs(pos, cata)
+    
 
     ##### Pour la constru des items #####
     def piece_constru(self, pos):
@@ -223,10 +298,8 @@ game = Game()
 platformes = []
 platformes.append(game.blocDepart)
 # Graphique setup
-background_0 = pygame.image.load("Assets/Images/celeste_bg.jpg")
-background_0 = pygame.transform.scale(background_0, (1280, 720))
-background_1 = pygame.image.load("Assets/Images/celeste_bg.jpg")
-background_1 = pygame.transform.scale(background_1, (1280, 720))
+background_0 = pygame.image.load("Assets/Images/bg.jpg")
+background_1 = pygame.image.load("Assets/Images/bg.jpg")
 play = pygame.image.load("Assets/Images/play.png").convert_alpha()
 myfont = pygame.font.SysFont("monospace", 16)
 # Pour les pieces
@@ -246,6 +319,11 @@ piece = 0
 frame_counter = 200         # Pour la gestion du temps entre le spawn des plateformes
 mouseUp = False             # Pour le lancer de l'oiseau
 
+
+
+
+
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -256,8 +334,8 @@ while running:
             running = False
 
     # setup graphique
-    screen.blit(background_0, (0, 0))
-    screen.blit(background_1, (0, 0))
+    screen.blit(background_0, (0, -125))
+    screen.blit(background_1, (0, -125))
     screen.blit(game.player.image, game.player.rect)
     # Pour les pieces
     screen.blit(image_piece, (0, 0))
@@ -470,7 +548,7 @@ while running:
     # flip() the display to put your work on screen
     pygame.display.flip()
 file = open("LevelSave.txt","a")
-score = game.player.piece * 1000
+score = game.player.piece * 10000
 file.write("Score:RunJump:"+str(score)+"\n")
 
 file.close()
