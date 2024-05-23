@@ -8,33 +8,33 @@ Collaborateurs  :
 -	DURIAUD Thomas
 
 # Déscription rapide du projet
-4 jeux réunis en un seul jeu toujours avec des trajéctoires mais des gameplay totalement différents
+Dans ce jeu, vous trouverez 4 jeux réunis en un seul jeu toujours avec des trajectoires mais des gameplay totalement différents.
 
 # Manuels d'utilisation
 - ## Bumped
   - ### Desciption
-    Un jeu de type énigme où le but est de placer différents bumpers au bon endroit afin d'atteindre le drapeau à la fin d'un niveau
+    Un jeu de type énigme où le but est de placer différents bumpers au bon endroit afin d'atteindre le drapeau à la fin d'un niveau.
   - ### Blocs
     - Bloc de bois : un simple bloc qui bloque la balle
-    - pique ou boule de piques : détruit la balle, il n'y a plus qu'a recommencer le niveau
-    - portail vert : annule la gravité
-    - portail bleu / oranges : téléporte la balle du portail bleu au portail orange (et pas l'inverse)
+    - Pics ou boule de pics : détruit la balle, le joueur doit relancer la balle
+    - Portail antigravité : annule la gravité
+    - Portail bleu / oranges : téléporte la balle du portail bleu vers le portail orange
   - ### Bumpers
-    - Petit bumper : fait simplement rebondire la balle
-    - Moyen bumper : augmente la vitesse de la balle qui rebondira plus haut et plus loin
-    - Gros bumper : inverse la gravité
+    - Normal : fait simplement rebondir la balle
+    - Speed : augmente la vitesse de la balle qui rebondira plus haut et plus loin
+    - Inverse : inverse la gravité
   - ### Construction
-    - Cliquer sur un objet et sur un endroit de la map pour le placer
-    - Cliquer sur le curseur puis l'objet pour le selectioner
+    - Cliquez sur un objet et sur un endroit de la map pour le placer
+    - Cliquez sur le curseur en haut à droite puis l'objet pour le sélectioner
     - Si vous êtes en édition de niveau :
-      - Cliquer sur l'icone d'enregistrement pour enregistrer votre map
-      - Cliquer sur la poubelle pour supprimer une map enregistrée
-      - Cliquer sur les plus ou les moins d'un type de bumpeur pour ajuster leurs nombres utilisable par le joueur
+      - Cliquez sur l'icône d'enregistrement pour enregistrer votre niveau
+      - Cliquez sur la poubelle pour supprimer un niveau enregistré
+      - Cliquez sur les plus ou les moins d'un type de bumpeur pour ajuster son nombre utilisable par le joueur
   - ### Keybinds :
-     - F : pour déplacer un objet séléctionné au préalable
-     - R : pour tourner un objet séléctionné au préalable
-     - LEFT ARROW : pour tourner de 45 degrès un objet séléctionné au préalable
-     - ESPACE : pour lancer ou annuler le lancer de la balle
-     - B : pour accéder au mode de placement des bumpers
-     - SHIFT + A : pour accéder au mode éditeur de niveau
-     - ESC : pour quitter le jeu et retourner au menu
+     - F : déplacer un objet séléctionné
+     - R : tourner un objet séléctionné
+     - LEFT_ARROW : tourner de 45 degrés un objet séléctionné
+     - ESPACE : lancer ou annuler le lancer de la balle
+     - B : accéder au mode de placement des bumpers
+     - SHIFT + A : accéder au mode éditeur de niveau
+     - ESC : quitter le jeu et retourner au menu
