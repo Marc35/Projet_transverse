@@ -184,13 +184,16 @@ for line in lines:
         score += int(line.split(":")[2])
         print("SCORE : ", score)
 
-if score != 0:
+try:
     serverAddr = '141.94.37.226'
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((serverAddr, 4322))
     ge = ["point", str(text_value), str(score)]
     s.send(pickle.dumps(ge))
     print("Value sent to the server")
+except Exception as e:
+    print(f"An error occurred: {e}")
+    print("Could not connect to the server")
 # Main game loop
 running = True
 
@@ -267,7 +270,7 @@ while running:
     textRect.center = (1200, 50)
     screen.blit(text, textRect)
     for i in range(len(scoreboard)):
-        text = font2.render(scoreboard[i], True, (219,144,46))
+        text = font2.render(str(scoreboard[i]), True, (219,144,46))
         textRect = text.get_rect()
         textRect.center = (1200, 50+(i+1)*40)
         screen.blit(text, textRect)
@@ -276,12 +279,12 @@ while running:
     font = pygame.font.Font('freesansbold.ttf', 32)
     text = font.render("SCORE : ", True,(255,223,0))
     textRect = text.get_rect()
-    textRect.center = (200, 200)
+    textRect.center = (150, 20)
     screen.blit(text, textRect)
 
     text = font.render(str(score), True,(255,223,0))
     textRect = text.get_rect()
-    textRect.center = (200, 400)
+    textRect.center = (150, 70)
     screen.blit(text, textRect)
 
 
