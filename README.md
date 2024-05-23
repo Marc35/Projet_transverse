@@ -10,6 +10,10 @@ Collaborateurs  :
 # Déscription rapide du projet
 Dans ce jeu, vous trouverez 4 jeux réunis en un seul jeu toujours avec des trajectoires mais des gameplay totalement différents.
 
+`pip install pymunk`
+
+`pip install opencv-python`
+
 # Manuels d'utilisation
 - ## Bumped
   - ### Desciption
