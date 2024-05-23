@@ -231,6 +231,7 @@ while running:
 
 file = open("LevelSave.txt","a")
 score = game.build.mapToBuild*50000
-file.write("Score:RunJump:"+str(score)+"\n")
+file.write("Score:Bumper:"+str(score)+"\n")
+file.close()
 # quit pygame properly to clean up resources
 pygame.quit()

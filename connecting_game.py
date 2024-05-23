@@ -114,6 +114,19 @@ screen = pygame.display.set_mode((screen_w, screen_h))
 background_image = pygame.image.load("paysage2.jpg").convert()
 background_image = pygame.transform.scale(background_image, (screen_w, screen_h))
 
+portal1 = pygame.image.load("portal1.png").convert_alpha()
+portal1 = pygame.transform.scale(portal1, (100, 100))
+portal2 = pygame.image.load("portal2.png").convert_alpha()
+portal2 = pygame.transform.scale(portal2, (100, 100))
+portal3 = pygame.image.load("portal3.png").convert_alpha()
+portal3 = pygame.transform.scale(portal3, (100, 100))
+portal4 = pygame.image.load("portal4.png").convert_alpha()
+portal4 = pygame.transform.scale(portal4, (100, 100))
+portal5 = pygame.image.load("portal5.png").convert_alpha()
+portal5 = pygame.transform.scale(portal5, (100, 100))
+
+background_image = pygame.transform.scale(background_image, (screen_w, screen_h))   
+
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 BLUE = (0,0,255)
@@ -151,11 +164,11 @@ l_prop = [
 ]
 
 all_portal = [
-    [800,200,45, BLUE, "a\n"],#"a\n"
-    [600,400,50, YELLOW, "b\n"],#"b\n"
-    [400,600,50, AQUA, "c\n"],#"c\n"
-    [1200,300,50, MAGENTA, "d\n"],#"d\n"
-    [1000,500,50, GREEN, "e\n"]
+    [800,200,45, portal1, "a\n"],#"a\n"
+    [380,150,50, portal2, "b\n"],#"b\n"
+    [300,560,50, portal3, "c\n"],#"c\n"
+    [1300,430,50, portal4, "d\n"],#"d\n"
+    [1000,550,50, portal5, "e\n"]   
 ]
 
 l_portal = []
@@ -175,8 +188,8 @@ if "c" not in l_letter:
     l_portal.append(all_portal[2])
 if "d" not in l_letter:
     l_portal.append(all_portal[3])
-if "e" not in l_letter:
-    l_portal.append(all_portal[4])
+    
+l_portal.append(all_portal[4]) #On ajoute le dernier portail dans tous les cas cvar c'est le jeu en ligne.
 
 for line in lines:
     print(line[:5])
@@ -264,7 +277,7 @@ while running:
     for prop in l_prop:
         pygame.draw.rect(screen, BLACK, (prop[0], prop[1], prop[2], prop[3]))
     for portal in l_portal:
-        pygame.draw.circle(screen, portal[3], (portal[0], portal[1]), portal[2], 5)
+        screen.blit(portal[3], (portal[0]-portal[2], portal[1]-portal[2]))
         
     speed = 25.8
     text = font2.render("___SCOREBOARD___", True, (255,0,0))
