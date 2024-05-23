@@ -223,8 +223,10 @@ game = Game()
 platformes = []
 platformes.append(game.blocDepart)
 # Graphique setup
-background_0 = pygame.image.load("Assets/Images/bg.jpg")
-background_1 = pygame.image.load("Assets/Images/bg.jpg")
+background_0 = pygame.image.load("Assets/Images/celeste_bg.jpg")
+background_0 = pygame.transform.scale(background_0, (1280, 720))
+background_1 = pygame.image.load("Assets/Images/celeste_bg.jpg")
+background_1 = pygame.transform.scale(background_1, (1280, 720))
 play = pygame.image.load("Assets/Images/play.png").convert_alpha()
 myfont = pygame.font.SysFont("monospace", 16)
 # Pour les pieces
@@ -254,8 +256,8 @@ while running:
             running = False
 
     # setup graphique
-    screen.blit(background_0, (0, -125))
-    screen.blit(background_1, (0, -125))
+    screen.blit(background_0, (0, 0))
+    screen.blit(background_1, (0, 0))
     screen.blit(game.player.image, game.player.rect)
     # Pour les pieces
     screen.blit(image_piece, (0, 0))
@@ -468,7 +470,7 @@ while running:
     # flip() the display to put your work on screen
     pygame.display.flip()
 file = open("LevelSave.txt","a")
-score = game.player.piece * 10000
+score = game.player.piece * 1000
 file.write("Score:RunJump:"+str(score)+"\n")
 
 file.close()

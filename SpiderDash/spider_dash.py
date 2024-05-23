@@ -45,6 +45,7 @@ l_laser = []
         # The first 4 are the wall
 l_prop = [[-100, screen_h-40, screen_w+200, 100], [-121, -100, 100, screen_h+150], [screen_w+21, -100, 100, screen_h+150], [-100, -100, screen_w+200, 100],
           [243, 214, 349, 59], [478, 435, 382, 88], [1070, 314, 439, 75]]
+
 l_enemy = []
 
 keys_B4 = {"z":0, "q":0, "s":0, "d":0, "space":0}
@@ -54,7 +55,13 @@ heart_image = pygame.image.load("heart.png").convert_alpha()
 heart_image = pygame.transform.scale(heart_image, (50,50))
 
 background_image = pygame.image.load("background.jpg").convert()
-background_image = pygame.transform.scale(background_image, (screen_w, screen_h))
+background_image = pygame.transform.scale(background_image, (screen_w, screen_h+150))
+
+brick = pygame.image.load("brick.png").convert_alpha()
+l_brick = []
+
+for prop in l_prop:
+    l_brick.append(pygame.transform.scale(brick, (prop[2], prop[3])))
 
 def remove_from_list(lA, lB):
     """
@@ -119,7 +126,7 @@ def norm(vector):#Return the norm of a vector
         summ +=val*val
     return math.sqrt(summ)
 
-def draw(screen, background_image, heart_image, l_player, l_enemy,l_prop, l_particles, l_skin, l_laser, screen_h, screen_w):
+def draw(screen, background_image, heart_image, l_player, l_enemy,l_prop, l_particles, l_skin, l_laser, screen_h, screen_w, l_brick):
     """
     Draw everything needed for the game
     """
@@ -127,8 +134,8 @@ def draw(screen, background_image, heart_image, l_player, l_enemy,l_prop, l_part
     
     for prop in l_prop: #For each prop
         #We draw it on the screen in black
-        rect = pygame.Rect(prop[0], prop[1], prop[2], prop[3])
-        pygame.draw.rect(screen, "black", rect)
+        for (brick,prop) in zip(l_brick,l_prop):
+            screen.blit(brick, (prop[0], prop[1]))
 
     for particle in l_particles:
         pygame.draw.circle(screen, particle[3], (particle[0], particle[1]), 5)
@@ -467,7 +474,7 @@ while in_menu_spider_dash:
     textRect.center = (800, 700)
     screen.blit(text, textRect)
 
-    text = font.render("<| Skin précédent                        Skin suivant |>", True,(0,0,0))
+    text = font.render("<| Skin precedent                        Skin suivant |>", True,(0,0,0))
     textRect = text.get_rect()
     textRect.center = (800, 540)
     screen.blit(text, textRect)
@@ -481,7 +488,7 @@ while in_menu_spider_dash:
 while running_spider_dash:
     keys = pygame.key.get_pressed()
     
-    draw(screen, background_image, heart_image, l_player, l_enemy,l_prop, l_particles, l_skin, l_laser, screen_h, screen_w)
+    draw(screen, background_image, heart_image, l_player, l_enemy,l_prop, l_particles, l_skin, l_laser, screen_h, screen_w, l_brick)
     l_laser = time_laser(l_laser, dt)
     l_player = launch_laser(l_player, l_laser, screen_h, screen_w)
     #if r.uniform(0, 3/(time+0.01))*10<1:

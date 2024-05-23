@@ -54,7 +54,7 @@ if first_connection:
         display.blit(background_image, (0, 0))
         if(text_value == ""):
             
-            display.blit(font.render("Veuillez choisir un nom", True, (255, 0, 0)), (100, 250))
+            display.blit(font.render("Veuillez choisir un nom", True, (255, 0, 0)), (700, 360))
             pygame.display.update()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -79,7 +79,7 @@ if first_connection:
             if event.type == pygame.TEXTINPUT:
                 text_value += event.text
                 text = font.render(text_value, True, (255, 255, 255))
-        display.blit(text, (100, 250))
+        display.blit(text, (700, 360))
         pygame.display.update()
         
 
@@ -125,6 +125,9 @@ portal4 = pygame.transform.scale(portal4, (100, 100))
 portal5 = pygame.image.load("portal5.png").convert_alpha()
 portal5 = pygame.transform.scale(portal5, (100, 100))
 
+dirt = pygame.image.load("dirt.png").convert_alpha()
+l_dirt = []
+
 background_image = pygame.transform.scale(background_image, (screen_w, screen_h))   
 
 WHITE = (255, 255, 255)
@@ -162,6 +165,10 @@ l_prop = [
     [1200,480, 200, 40],
     [200,600, 200, 40]
 ]
+
+for prop in l_prop:
+    l_dirt.append(pygame.transform.scale(dirt, (prop[2], prop[3])))
+
 
 all_portal = [
     [800,200,45, portal1, "a\n"],#"a\n"
@@ -258,9 +265,7 @@ while running:
         except pickle.UnpicklingError as e:
             print(f"Error unpickling data: {e}")
         except Exception as e:
-            print(f"An error occurred: {e}") 
-
-        
+            print(f"An error occurred: {e}")
     
 
     update_data += 1
@@ -274,8 +279,9 @@ while running:
             running = False
             pygame.quit()
             sys.exit()
-    for prop in l_prop:
-        pygame.draw.rect(screen, BLACK, (prop[0], prop[1], prop[2], prop[3]))
+    for (dirt,prop) in zip(l_dirt,l_prop):
+        screen.blit(dirt, (prop[0], prop[1]))
+        
     for portal in l_portal:
         screen.blit(portal[3], (portal[0]-portal[2], portal[1]-portal[2]))
         
